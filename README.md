@@ -8,8 +8,8 @@ Ground Truth Example
 
 Experiment Objective:
 (1) Developing deep learning models for segmenting oral tissues into 8 elements (tissues). </br>
-(2) Locating the oral tissue in oral images to narrow the area for consideration. 
-(3) Testing the hypothesis if the oral cropping algorithm has an effect on the efficiency of oral tissue segmentation. 
-(4) Testing the hypothesis if the image resizing may affect theoral tissue segmentation performance.
+(2) Locating the oral tissue in oral images to narrow the area for consideration. </br>
+(3) Testing the hypothesis if the oral cropping algorithm has an effect on the efficiency of oral tissue segmentation. </br>
+(4) Testing the hypothesis if the image resizing may affect theoral tissue segmentation performance. </br>
 
 Each objective corresponds to one experiment, so this research will comprise a total of 4 experiments.
