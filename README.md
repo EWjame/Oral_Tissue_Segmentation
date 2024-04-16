@@ -14,3 +14,7 @@ Experiment Objective: </br>
 (4) Testing the hypothesis if the image resizing may affect theoral tissue segmentation performance. </br>
 
 Each objective corresponds to one experiment, so this research will comprise a total of 4 experiments.
+
+We use 4 different state-of-the-arts Segmentation models and 3 different Backbones for training and testing in 1st Experiment. </br>
+Models : U-Net, Feature Pyramid Networks (FPN), LinkNet and DeeplapV3+ </br>
+Backbones : EfficientNetB5, ResNet50(25.6M) and MobileNetV2
