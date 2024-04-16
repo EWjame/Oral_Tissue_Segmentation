@@ -18,3 +18,5 @@ Each objective corresponds to one experiment, so this research will comprise a t
 We use 4 different state-of-the-arts Segmentation models and 3 different Backbones for training and testing in 1st Experiment. </br>
 Models : U-Net, Feature Pyramid Networks (FPN), LinkNet and DeeplapV3+ </br>
 Backbones(No.params) : EfficientNetB5(30.6M), ResNet50(25.6M) and MobileNetV2(3.5M)
+
+Thanks to Pavel Iakubovskii (Segmentation models Python Library) for the code to load the segmentation model. (https://github.com/qubvel/segmentation_models)
