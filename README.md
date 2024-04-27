@@ -23,7 +23,7 @@ Thanks to Pavel Iakubovskii (Segmentation models Python Library) for the code to
 
 
 oral_segment1.py : 1.Use with Original oral images for trainning models </br>
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;2.Resize images with streching images (using opencv2.resize()) </br>
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;2.Resize images with streching images (using opencv2.resize()) </br>
                    ** This file used by all models in Experiment (1)
 
 oral_segment2_crop.py : 1.Use with Crop Mouth oral images trainning models </br>
