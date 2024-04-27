@@ -20,3 +20,11 @@ Models : U-Net, Feature Pyramid Networks (FPN), LinkNet and DeeplapV3+ </br>
 Backbones(No.params) : EfficientNetB5(30.6M), ResNet50(25.6M) and MobileNetV2(3.5M)
 
 Thanks to Pavel Iakubovskii (Segmentation models Python Library) for the code to load the segmentation model. (https://github.com/qubvel/segmentation_models)
+
+oral_segment1.py : 1.Use with Original oral images for trainning models
+                   2.Resize images with streching images (using opencv2.resize())
+                   ** This file used by all models in Experiment (1)
+
+oral_segment2_crop.py : 1.Use with Crop Mouth oral images trainning models
+                        2.Resize images with Zeros padding (using tensorflow.image.resize_with_pad())
+                        ** This file used by all models in Experiment (3)
