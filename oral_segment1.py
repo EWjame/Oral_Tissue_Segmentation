@@ -95,9 +95,9 @@ for i in range(len(images_lst)):
 data = {}
 data["ModelName"] = "segment_oral_multi_organ_test_1"  # Your model name
 data["ModelACTT"] = "FPN" # model
-data["BackBone"] = "efficientnetb5" #efficientnetb5 #mobilenetv2 efficientnetb5 resnet50
+data["BackBone"] = "efficientnetb5" #efficientnetb5 #mobilenetv2  #resnet50  !! --> #https://github.com/qubvel/segmentation_models?tab=readme-ov-file#models-and-backbones
 data["Class"] = 7+1
-data["Epoch"] = 5
+data["Epoch"] = 2
 data["BatchSize"] = 16
 data["ImgSize"] = (512,512)
 
@@ -432,7 +432,7 @@ x_test = Xtest.astype(int)
 # Finding F1-Score 
 def F1_score(list_of_groundtruth,list_of_predict ,num_classes=None):
     
-'''
+    '''
 
     Inputs : list_of_groundtruth = numpy.array (W,H) ex.(512,512)
              list_predict        = numpy.array (W,H)
@@ -445,7 +445,7 @@ def F1_score(list_of_groundtruth,list_of_predict ,num_classes=None):
                 data['weighted_recalls'] = weighted_average_recalls       # weighted_average_recalls    = sum( recalls[class_i] * number_of_pixels[class_i] ) / sum(number_of_pixels[all_class])
                 data['f1_weighted'] = weighted_f1                         # weighted_f1 = harmonic mean of weighted_precisions and weighted recalls
 
-'''
+    '''
 
     if num_classes == None:
         num_classes = len(np.unique(list_of_groundtruth[0]))
