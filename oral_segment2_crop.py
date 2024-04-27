@@ -36,9 +36,8 @@ sm.set_framework('tf.keras')
 sm.framework()
 from sklearn.model_selection import train_test_split
 
-os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"  # this MUST come before any tf call 
-
-#GPU set memory growth for tensorflow library
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"  # this MUST come before any tf call.
+#GPU Checking
 import tensorflow as tf
 physical_devices = tf.config.list_physical_devices('GPU')
 print(physical_devices)
@@ -53,16 +52,14 @@ except:
     pass
 
 
-'''
+#Full size image
+# data_type = "Full images"
+# img_path = "../Dataset/trainning2/images"
+# gt_path = "../Dataset/trainning2/labels"
 
-Loading Image and Ground Truth
-
-'''
-
-#Path of images and labels 
-data_type = "Full images" # full image of image (Original oral images) or Croping Mouth images (Croping Mouth using mouth detection model)
-img_path = "../Dataset/trainning2/images"
-gt_path = "../Dataset/trainning2/labels"
+data_type = "Crop Mouth images"
+img_path = "../Dataset/trainning3(crop mouth)/images"
+gt_path = "../Dataset/trainning3(crop mouth)/labels"
 
 
 images_dir = gb.glob(img_path+"/*")
@@ -91,25 +88,26 @@ print(len(images_lst),len(labels_lst))
 for i in range(len(images_lst)):
     print(len(images_lst[i]),len(labels_lst[i]))
 
+
 # Selection Model Achitecture and setting
 data = {}
-data["ModelName"] = "segment_oral_multi_organ_test_1"  # Your model name
-data["ModelACTT"] = "FPN" # model
-data["BackBone"] = "efficientnetb5" #efficientnetb5 #mobilenetv2  #resnet50  !! --> #https://github.com/qubvel/segmentation_models?tab=readme-ov-file#models-and-backbones
+data["ModelName"] = "segment_oral_multi_organ_crop_1"
+data["ModelACTT"] = "FPN"         
+data["BackBone"] = "efficientnetb5" #efficientnetb5 #mobilenetv2 resnet50
 data["Class"] = 7+1
-data["Epoch"] = 2
+data["Epoch"] = 200
 data["BatchSize"] = 16
 data["ImgSize"] = (512,512)
 
 
 
-#set Path to save all result files
+#set Path to save all files
 save_model_path = "../Oral_segment_result/"
 if os.path.isdir(save_model_path+data["ModelName"]) == False:
     os.mkdir(save_model_path+data["ModelName"])
     ml.dict_2_txt(data,save_model_path+"data.txt") # save data detail
 else:
-    print("Already have this model name. This model will replace Your old model")
+    print("Already have this model name")
 save_model_path = save_model_path+data["ModelName"]+"/"
 
 
@@ -123,23 +121,28 @@ Xtrain_n,Ytrain_n,Xvalid_n,Yvalid_n,Xtest_n,Ytest_n = ml.Split_Dataset(images_ls
 print(len(Xtrain_n),len(Ytrain_n),len(Xvalid_n),len(Yvalid_n),len(Xtest_n),len(Ytest_n))
 
 
-#Resize Normal form
+# #Resize Padding Zero
 Xtrain,Ytrain = [],[]
 Xvalid, Yvalid = [] ,[]
 Xtest,Ytest = [],[]
 
+#Load images using tf.image.resize_with_pad() to resize with padding zeros
 print("Load Train set")
 for k,(m,n) in enumerate(zip(Xtrain_n,Ytrain_n)):
     print(" "*20,end="\r")
     print(k+1,"/",len(Xtrain_n),end="\r")
     im = cv2.imread(m)
     im = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
-    im = cv2.resize(im,data['ImgSize'])
+    im = tf.image.resize_with_pad(im,target_height=data['ImgSize'][1],target_width=data['ImgSize'][0], method='nearest')
+    im = im.numpy()
     lb = cv2.imread(n, 0) 
-    lb = cv2.resize(lb,data['ImgSize'])
+    lb = np.expand_dims(lb, axis=2)
+    lb = tf.image.resize_with_pad(lb,target_height=data['ImgSize'][1],target_width=data['ImgSize'][0], method='nearest')
+    lb = lb.numpy()
+    lb = np.squeeze(lb)
     Xtrain.append(im)
     Ytrain.append(lb)
-print("Loaded Trainning Set")
+print()
 Xtrain = np.array(Xtrain)
 Ytrain = np.array(Ytrain)
 print(Xtrain.shape,Ytrain.shape)
@@ -150,15 +153,40 @@ for k,(m,n) in enumerate(zip(Xvalid_n,Yvalid_n)):
     print(k+1,"/",len(Xvalid_n),end="\r")
     im = cv2.imread(m)
     im = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
-    im = cv2.resize(im,data['ImgSize'])
+    im = tf.image.resize_with_pad(im,target_height=data['ImgSize'][1],target_width=data['ImgSize'][0], method='nearest')
+    im = im.numpy()
     lb = cv2.imread(n, 0) 
-    lb = cv2.resize(lb,data['ImgSize'])
+    lb = np.expand_dims(lb, axis=2)
+    lb = tf.image.resize_with_pad(lb,target_height=data['ImgSize'][1],target_width=data['ImgSize'][0], method='nearest')
+    lb = lb.numpy()
+    lb = np.squeeze(lb)
     Xvalid.append(im)
     Yvalid.append(lb)
-print("Loaded validation Set")
+print()
 Xvalid = np.array(Xvalid)
 Yvalid = np.array(Yvalid)
 print(Xvalid.shape,Yvalid.shape)
+
+
+print("Load test set")
+for k,(m,n) in enumerate(zip(Xtest_n,Ytest_n)):
+    print(" "*20,end="\r")
+    print(k+1,"/",len(Xtest_n),end="\r")
+    im = cv2.imread(m)
+    im = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
+    im = tf.image.resize_with_pad(im,target_height=data['ImgSize'][1],target_width=data['ImgSize'][0], method='nearest')
+    im = im.numpy()
+    lb = cv2.imread(n, 0) 
+    lb = np.expand_dims(lb, axis=2)
+    lb = tf.image.resize_with_pad(lb,target_height=data['ImgSize'][1],target_width=data['ImgSize'][0], method='nearest')
+    lb = lb.numpy()
+    lb = np.squeeze(lb)
+    Xtest.append(im)
+    Ytest.append(lb)
+print()
+Xtest = np.array(Xtest)
+Ytest = np.array(Ytest)
+print(Xtest.shape,Ytest.shape)
 
 
 print("Load test set")
@@ -188,7 +216,7 @@ Xtest = Xtest.astype(np.float32)
 Ytrain = Ytrain.astype(np.float32)
 Yvalid = Yvalid.astype(np.float32)
 Ytest = Ytest.astype(np.float32)
-
+print("int to float Done")
 
 '''
 
@@ -197,8 +225,6 @@ Initial Train-time Augment image Function
 '''
 
 #Create function for train-time augmentation
-# we apply ImageDatagenerator for image segmentation task
-
 def trainGenerator(Xtrain, Ytrain,batchsize=8,seed=804):
     
     image_datagen = ImageDataGenerator(
@@ -276,7 +302,6 @@ data["Augment"] = '''
         fill_mode='constant'
                 '''
 
-
 '''
 
 Initial Optimize Algorithm and Setting Params.
@@ -301,33 +326,32 @@ EarlyStop=EarlyStopping(patience=data["EarlyStop"],restore_best_weights=True,ver
 Reduce_LR=ReduceLROnPlateau(monitor='loss',verbose=1,factor=data['factor'],patience=data['lr_patience'],min_lr=data["min_lr"])
 model_check=ModelCheckpoint(save_model_path+data["ModelName"]+'_best.h5',monitor='val_loss',verbose=1,save_best_only=True)
 tensorbord=TensorBoard(log_dir='logs')
-
 #Packing Training function 
 if Reduce_LR and EarlyStop:
     callback=[EarlyStop,Reduce_LR,model_check,tensorbord]
     data['Reduce_LR'] = 'True'
     data['Earlystop'] = 'True'
-    print("Activate Reduce_LR and EarlyStop")
+    print(1)
 elif Reduce_LR:
     callback=[Reduce_LR,model_check,tensorbord]
     data['Reduce_LR'] = 'True'
     data['Earlystop'] = 'False'
-    print("Activate Reduce_LR")
+    print(2)
 elif EarlyStop:
     callback=[EarlyStop,model_check,tensorbord]
     data['Reduce_LR'] = 'False'
     data['Earlystop'] = 'True'
-    print("Activate EarlyStop")
+    print(3)
 else:
+    print(4)
     callback=[model_check,tensorbord]
-    print("No add-ons Function")
 
 
 
 #focal jaccard loss
 loss = sm.losses.categorical_focal_jaccard_loss
 
-# Define the strategy (Multi gpu process) 
+# Define the strategy (Multi gpu process)
 # strategy = tf.distribute.MirroredStrategy() # This line can use on multi gpu computer
 
 #Load model
@@ -347,7 +371,6 @@ elif data["ModelACTT"] == "DEEPLABV3+":
     elif data['BackBone'] == "mobilenetv2":
         model = ml.DeeplabV3Plus_MobileNetV2(image_size = (data["ImgSize"][0],data["ImgSize"][1],3), num_classes=data["Class"],activation="softmax")
 model.compile(optimizer=optimizer_adam,loss=loss,metrics=["accuracy",loss])
-
 
 num_class = data['Class']
 data['Model_loss'] = 'sm.losses.categorical_focal_jaccard_loss'
@@ -428,9 +451,9 @@ x_test = Xtest.astype(int)
 
 
 
-# Finding F1-Score 
+
 def F1_score(list_of_groundtruth,list_of_predict ,num_classes=None):
-    
+
     '''
 
     Inputs : list_of_groundtruth = numpy.array (W,H) ex.(512,512)
