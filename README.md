@@ -11,7 +11,7 @@ Experiment Objective: </br>
 (1) Developing deep learning models for segmenting oral tissues into 8 elements (tissues). </br>
 (2) Locating the oral tissue in oral images to narrow the area for consideration.[Conference paper](https://ieeexplore.ieee.org/abstract/document/10329780) </br>
 (3) Testing the hypothesis if the oral cropping algorithm has an effect on the efficiency of oral tissue segmentation. </br>
-(4) Testing the hypothesis if the image resizing may affect theoral tissue segmentation performance. </br>
+(4) Testing the hypothesis if the image resizing may affect the oral tissue segmentation performance. </br>
 
 Each objective corresponds to one experiment, so this research will comprise a total of 4 experiments.
 
