@@ -1,6 +1,6 @@
 # Oral Tissues Segmentation
 ### Project Name : Comprehensive Segmentation Algorithms for Oral Images 
-### Paper Link : (Not published yet)
+### Paper Link : (Not yet published)
 This repository Oral Tissues Segmentation is my master's degree Thesis that using Segmentation models to Segment oral tissue in oral images into 8 parts include :(Oral mucosa, Lips, Tongue, teeth, Floor of Mouth, Gingiva, Others Inside and Background)
 
 
